@@ -1,6 +1,6 @@
 {
   "name": "loopback-connector-mssql",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "Microsoft SQL Server connector for LoopBack",
   "keywords": [
     "StrongLoop",
@@ -16,6 +16,7 @@
     "async": "^0.9.0",
     "debug": "^2.1.1",
     "loopback-connector": "^2.1.0",
+    "moment": "^2.14.1",
     "mssql": "^2.1.0",
     "strongloop-license": "^1.0.2"
   },
