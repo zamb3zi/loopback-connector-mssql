@@ -1,3 +1,9 @@
+// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Node module: loopback-connector-mssql
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
+'use strict';
 module.exports = require('should');
 
 var DataSource = require('loopback-datasource-juggler').DataSource;
@@ -5,29 +11,28 @@ var DataSource = require('loopback-datasource-juggler').DataSource;
 var config = {};
 try {
   config = require('rc')('loopback', {test: {mssql: {}}}).test.mssql;
-} catch(err) {
+} catch (err) {
   config = {
     user: 'demo',
     password: 'L00pBack',
     host: 'localhost',
     database: 'demo',
-    supportsOffSetFetch: Math.random() > 0.5
+    supportsOffSetFetch: Math.random() > 0.5,
   };
 }
 
-global.getConfig = function (options) {
-
+global.getConfig = function(options) {
   var dbConf = {
-    host: config.host || config.hostname || config.server || 'localhost',
-    port: config.port || 1433,
-    database: config.database || 'test',
-    user: config.user || config.username,
-    password: config.password,
+    host: process.env.MSSQL_HOST || config.host || config.hostname || config.server || 'localhost',
+    port: process.env.MSSQL_PORT || config.port || 1433,
+    database: process.env.MSSQL_DATABASE || config.database || 'test',
+    user: process.env.MSSQL_USER || config.user || config.username,
+    password: process.env.MSSQL_PASSWORD || config.password,
     pool: {
       max: 10,
       min: 0,
-      idleTimeoutMillis: 30000
-    }
+      idleTimeoutMillis: 30000,
+    },
   };
 
   if (options) {
@@ -39,9 +44,15 @@ global.getConfig = function (options) {
   return dbConf;
 };
 
-global.getDataSource = global.getSchema = function (options) {
+global.getDataSource = global.getSchema = function(options) {
+  /* global getConfig */
   var db = new DataSource(require('../'), getConfig(options));
   return db;
+};
+
+global.connectorCapabilities = {
+  ilike: false,
+  nilike: false,
 };
 
 global.sinon = require('sinon');

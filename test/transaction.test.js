@@ -1,3 +1,9 @@
+// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Node module: loopback-connector-mssql
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
+'use strict';
 require('./init.js');
 require('should');
 
@@ -6,12 +12,12 @@ var Transaction = require('loopback-connector').Transaction;
 var db, Post;
 
 describe('transactions', function() {
-
   before(function(done) {
+    /* global getDataSource */
     db = getDataSource();
     Post = db.define('PostTX', {
       title: {type: String, length: 255, index: true},
-      content: {type: String}
+      content: {type: String},
     });
     db.automigrate('PostTX', done);
   });
@@ -54,7 +60,6 @@ describe('transactions', function() {
   }
 
   describe('commit', function() {
-
     var post = {title: 't1', content: 'c1'};
     before(createPostInTx(post));
 
@@ -74,7 +79,6 @@ describe('transactions', function() {
   });
 
   describe('rollback', function() {
-
     var post = {title: 't2', content: 'c2'};
     before(createPostInTx(post));
 
@@ -92,12 +96,4 @@ describe('transactions', function() {
 
     it('should not see the rolledback insert', expectToFindPosts(post, 0));
   });
-
 });
-
-
-
-
-
-
-

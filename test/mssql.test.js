@@ -1,34 +1,39 @@
+// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Node module: loopback-connector-mssql
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
+'use strict';
 require('./init');
 
 var should = require('should');
-
 var Post, PostWithUUID, PostWithStringId, db;
 
-describe('mssql connector', function () {
-
-  before(function () {
+describe('mssql connector', function() {
+  before(function() {
+    /* global getDataSource */
     db = getDataSource();
 
     Post = db.define('PostWithBoolean', {
-      title: { type: String, length: 255, index: true },
-      content: { type: String },
-      approved: Boolean
+      title: {type: String, length: 255, index: true},
+      content: {type: String},
+      approved: Boolean,
     });
 
     PostWithUUID = db.define('PostWithUUID', {
       id: {type: String, generated: true, id: true},
-      title: { type: String, length: 255, index: true },
-      content: { type: String },
-      approved: Boolean
+      title: {type: String, length: 255, index: true},
+      content: {type: String},
+      approved: Boolean,
     });
 
     PostWithStringId = db.define('PostWithStringId', {
       id: {type: String, id: true, generated: false},
-      title: { type: String, length: 255, index: true },
-      content: { type: String },
-      approved: Boolean
+      title: {type: String, length: 255, index: true},
+      content: {type: String},
+      rating: {type: Number, mssql: {dataType: 'FLOAT'}},
+      approved: Boolean,
     });
-
   });
 
   it('should run migration', function(done) {
@@ -37,7 +42,7 @@ describe('mssql connector', function () {
         done(err);
       });
   });
-  
+
   var post;
   it('should support boolean types with true value', function(done) {
     Post.create({title: 'T1', content: 'C1', approved: true}, function(err, p) {
@@ -62,7 +67,6 @@ describe('mssql connector', function () {
     });
   });
 
-
   it('should support boolean types with false value', function(done) {
     Post.create({title: 'T2', content: 'C2', approved: false}, function(err, p) {
       should.not.exists(err);
@@ -76,12 +80,12 @@ describe('mssql connector', function () {
   });
 
   it('should single quote escape', function(done) {
-    Post.create({title: "T2", content: "C,D", approved: false}, function(err, p) {
+    Post.create({title: 'T2', content: 'C,D', approved: false}, function(err, p) {
       should.not.exists(err);
       post = p;
       Post.findById(p.id, function(err, p) {
         should.not.exists(err);
-        p.should.have.property('content', "C,D");
+        p.should.have.property('content', 'C,D');
         done();
       });
     });
@@ -150,6 +154,32 @@ describe('mssql connector', function () {
       });
     });
 
+  it('should avoid SQL injection for parameters containing (?)',
+    function(done) {
+      var connector = db.connector;
+      var value1 = '(?)';
+      var value2 = ', 1 ); INSERT INTO SQLI_TEST VALUES (1, 2); --';
+
+      connector.execute('DROP TABLE SQLI_TEST;', function(err) {
+        connector.execute('CREATE TABLE SQLI_TEST' +
+          '(V1 VARCHAR(100), V2 VARCHAR(100) )',
+          function(err) {
+            if (err) return done(err);
+            connector.execute('INSERT INTO SQLI_TEST VALUES ( (?), (?) )',
+              [value1, value2], function(err) {
+                if (err) return done(err);
+                connector.execute('SELECT * FROM SQLI_TEST', function(err, data) {
+                  if (err) return done(err);
+                  data.should.be.eql(
+                    [{V1: '(?)',
+                      V2: ', 1 ); INSERT INTO SQLI_TEST VALUES (1, 2); --'}]);
+                  done();
+                });
+              });
+          });
+      });
+    });
+
   it('should allow string array for inq',
     function(done) {
       Post.find({where: {content: {inq: ['C1', 'C2']}}}, function(err, p) {
@@ -195,7 +225,8 @@ describe('mssql connector', function () {
   });
 
   it('should support string id', function(done) {
-    PostWithStringId.create({title: 'T1', content: 'C1', approved: true},
+    PostWithStringId.create(
+      {title: 'T1', content: 'C1', approved: true, rating: 3.5},
       function(err, p) {
         should.not.exists(err);
         p.should.have.property('id');
@@ -203,6 +234,7 @@ describe('mssql connector', function () {
         PostWithStringId.findById(p.id, function(err, p) {
           should.not.exists(err);
           p.should.have.property('title', 'T1');
+          p.should.have.property('rating', 3.5);
           done();
         });
       });
@@ -215,10 +247,11 @@ describe('mssql connector', function () {
     beforeEach(function createTestFixtures(done) {
       Post.create([
         {title: 'a', content: 'AAA'},
-        {title: 'b', content: 'BBB'}
+        {title: 'b', content: 'BBB'},
       ], done);
     });
     beforeEach(function addSpy() {
+      /* global sinon */
       sinon.stub(console, 'warn');
     });
     afterEach(function removeSpy()  {
@@ -250,12 +283,14 @@ describe('mssql connector', function () {
 
     context('with regex objects', function() {
       it('should print a warning and return an error', function(done) {
-        Post.find({where: {content: {regexp: new RegExp(/^A/)}}}, function(err,
-            posts) {
-          console.warn.calledOnce.should.be.ok;
-          should.exist(err);
-          done();
-        });
+        Post.find(
+          {where: {content: {regexp: new RegExp(/^A/)}}},
+          function(err, posts) {
+            console.warn.calledOnce.should.be.ok;
+            should.exist(err);
+            done();
+          }
+        );
       });
     });
   });

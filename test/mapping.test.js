@@ -1,3 +1,9 @@
+// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Node module: loopback-connector-mssql
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
+'use strict';
 var should = require('should');
 require('./init');
 
@@ -6,19 +12,19 @@ var async = require('async');
 var db;
 
 before(function() {
+  /* global getDataSource */
   db = getDataSource();
 });
 
 describe('Mapping models', function() {
   it('should honor the mssql settings for table/column', function(done) {
-
     var schema = {
       name: 'TestInventory',
       options: {
         idInjection: false,
         mssql: {
-          schema: 'dbo', table: 'INVENTORYTEST'
-        }
+          schema: 'dbo', table: 'INVENTORYTEST',
+        },
       },
       properties: {
         productId: {
@@ -27,8 +33,8 @@ describe('Mapping models', function() {
           generated: true,
           mssql: {
             columnName: 'PRODUCT_ID',
-            nullable: 'N'
-          }
+            nullable: 'N',
+          },
         },
         locationId: {
           type: 'String',
@@ -37,8 +43,8 @@ describe('Mapping models', function() {
           mssql: {
             columnName: 'LOCATION_ID',
             dataType: 'nvarchar',
-            nullable: 'N'
-          }
+            nullable: 'N',
+          },
         },
         available: {
           type: 'Number',
@@ -46,8 +52,8 @@ describe('Mapping models', function() {
           mssql: {
             columnName: 'AVAILABLE',
             dataType: 'int',
-            nullable: 'Y'
-          }
+            nullable: 'Y',
+          },
         },
         total: {
           type: 'Number',
@@ -55,10 +61,10 @@ describe('Mapping models', function() {
           mssql: {
             columnName: 'TOTAL',
             dataType: 'int',
-            nullable: 'Y'
-          }
-        }
-      }
+            nullable: 'Y',
+          },
+        },
+      },
     };
     var models = db.modelBuilder.buildModels(schema);
     var Model = models.TestInventory;
@@ -107,9 +113,8 @@ describe('Mapping models', function() {
             });
             callback(null, results);
           });
-        }
+        },
       ], done);
     });
-
   });
 });

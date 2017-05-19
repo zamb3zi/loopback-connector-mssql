@@ -1,4 +1,117 @@
-2016-02-10, Version 2.4.0
+2017-03-31, Version 3.0.0
+=========================
+
+ * Replicate issue_template from loopback repo (#120) (siddhipai)
+
+ * Refactor alter table (#134) (Diana Lau)
+
+ * Upgrade to loopback-connector@4.x (Loay)
+
+ * Refactor migration methods (ssh24)
+
+ * Refactor discovery methods (Loay Gewily)
+
+ * Update mocha timeout (Loay Gewily)
+
+ * Update LB-connector version (Loay)
+
+ * Add buildreplace method (Loay Gewily)
+
+ * Update README.md (#117) (Rand McKinney)
+
+ * Update w info from docs (#115) (Rand McKinney)
+
+ * Update paid support URL (Siddhi Pai)
+
+ * increase the timeout for autoupdate test (Eddie Monge)
+
+ * Start 3.x + drop support for Node v0.10/v0.12 (siddhipai)
+
+ * Drop support for Node v0.10 and v0.12 (Siddhi Pai)
+
+ * Start the development of the next major version (Siddhi Pai)
+
+ * Update README doc links (Candy)
+
+
+2016-10-14, Version 2.9.0
+=========================
+
+ * Add connectorCapabilities global object (#102) (Nicholas Duffy)
+
+ * Update translation files - round#2 (Candy)
+
+ * Add translated files (gunjpan)
+
+ * Update deps to loopback 3.0.0 RC (Miroslav Bajtoš)
+
+ * Update eslint infrastructure (Loay)
+
+ * Use juggler@3 for running tests (Simon Ho)
+
+ * Add globalization (Candy)
+
+ * Revert "Update Fix" (Loay)
+
+ * Update Fix (Loay)
+
+ * Update URLs in CONTRIBUTING.md (#88) (Ryan Graham)
+
+
+2016-06-21, Version 2.8.0
+=========================
+
+ * update copyright notices and license (Ryan Graham)
+
+ * Lazy connect when booting app (juehou)
+
+ * Add feature/eslint (Amir-61)
+
+ * Fix linting errors (Amir Jafarian)
+
+ * Auto-update by eslint --fix (Amir Jafarian)
+
+ * Add eslint infrastructure (Amir Jafarian)
+
+
+2016-04-07, Version 2.7.1
+=========================
+
+ * Keep float numbers (Raymond Feng)
+
+ * override other settings if url provided (juehou)
+
+
+2016-04-05, Version 2.7.0
+=========================
+
+ * Use request.input to avoid SQL injection (Raymond Feng)
+
+
+2016-03-15, Version 2.6.0
+=========================
+
+ * Remove regenerator from babel-runtime and bundle mssql (Raymond Feng)
+
+
+2016-03-10, Version 2.5.1
+=========================
+
+ * Remove the license check (Raymond Feng)
+
+
+2016-03-04, Version 2.5.0
+=========================
+
+
+
+2016-02-19, Version 2.4.1
+=========================
+
+ * Remove sl-blip from dependencies (Miroslav Bajtoš)
+
+
+2016-02-09, Version 2.4.0
 =========================
 
  * Refactor Fix for Insert into Table with Active Trigger by getting the column data type instead of varchar. https://github.com/strongloop/loopback-connector-mssql/issues/21 (FoysalOsmany)

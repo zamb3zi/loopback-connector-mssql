@@ -1,7 +1,10 @@
-{
+﻿{
   "name": "loopback-connector-mssql",
-  "version": "2.4.8",
+  "version": "3.0.0",
   "description": "Microsoft SQL Server connector for LoopBack",
+  "engines": {
+    "node": ">=4"
+  },
   "keywords": [
     "StrongLoop",
     "LoopBack",
@@ -13,30 +16,36 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "async": "^1.5.2",
+    "async": "^2.3.0",
     "debug": "^2.1.1",
-    "loopback-connector": "^2.1.0",
-    "moment": "^2.14.1",
-    "mssql": "^3.3.0",
-    "strongloop-license": "^1.0.2"
+    "loopback-connector": "^4.0.0",
+    "mssql": "^4.0.4",
+    "strong-globalize": "^2.5.8",
+    "sqlcmdjs": "^1.5.0"
   },
+  "bundledDependencies": [
+    "mssql"
+  ],
   "devDependencies": {
     "bluebird": "^3.3.3",
+    "eslint": "^3.19.0",
+    "eslint-config-loopback": "^8.0.0",
     "loopback-datasource-juggler": "^3.0.0",
-    "mocha": "^2.1.0",
+    "mocha": "^3.3.0",
     "rc": "^1.0.0",
     "should": "^8.0.2",
-    "sinon": "^1.15.4"
+    "sinon": "^2.1.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --timeout 5000 -R spec"
+    "lint": "eslint .",
+    "pretest": "node pretest.js",
+    "test": "./node_modules/.bin/mocha --timeout 9999 -R spec",
+    "posttest": "npm run lint",
+    "prepublish": "node remove-regenerator.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/strongloop/loopback-connector-mssql.git"
   },
-  "license": "SEE LICENSE IN LICENSE.md",
-  "optionalDependencies": {
-    "sl-blip": "http://blip.strongloop.com/loopback-connector-mssql@2.4.0"
-  }
+  "license": "SEE LICENSE IN LICENSE.md"
 }
