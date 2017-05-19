@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "loopback-connector-mssql",
   "version": "3.0.1",
   "description": "Microsoft SQL Server connector for LoopBack",
